@@ -31,6 +31,7 @@ def decrypt_affine(ciphertext: str, a: int = 5, b: int = 1) -> str:
 
     return plaintext
 
+
 # text = "абВгД"
 # print(encrypt_affine(text, 5, 1))
 # print(decrypt_affine(encrypt_affine(text, 5, 1), 5, 1))
