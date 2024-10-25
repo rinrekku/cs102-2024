@@ -32,7 +32,29 @@ def gcd(a: int, b: int) -> int:
     >>> gcd(3, 7)
     1
     """
-    return a if not b else gcd(b, a % b)
+    while b != 0:
+        a, b = b, a % b
+    return a
+
+
+def bezouts(a: int, b: int):
+    """
+    Returns 2 bezout coefficients x and y, such as a * x + b * y = gcd(a,b).
+    First it goes down until it hits the gcd, concurrenctly storing all the arguments;
+    Then it goes back out, returning arguments on the way up for calculation;
+    The final 2 arguments are calculated and returned.
+    Tests' source: Wikipedia
+    >>> bezouts(7, 40)
+    (-17, 3)
+    >>> bezouts(12, 30)
+    (-2, 1)
+    >>> bezouts(991, 981)
+    (-98, 99)
+    """
+    if not b:
+        return 1, 0
+    _x, _y = bezouts(b, a % b)
+    return _y, _x - _y * (a // b)
 
 
 def multiplicative_inverse(e: int, phi: int) -> int:
@@ -42,12 +64,6 @@ def multiplicative_inverse(e: int, phi: int) -> int:
     >>> multiplicative_inverse(7, 40)
     23
     """
-
-    def bezouts(a: int, b: int):
-        if not b:
-            return 1, 0
-        _x, _y = bezouts(b, a % b)
-        return _y, _x - _y * (a // b)
 
     x = bezouts(e, phi)[0]
     return x % phi
@@ -96,7 +112,7 @@ def decrypt(pk: tp.Tuple[int, int], ciphertext: tp.List[int]) -> str:
     # Unpack the key into its components
     key, n = pk
     # Generate the plaintext based on the ciphertext and key using a^b mod m
-    plain = [chr((char**key) % n) for char in ciphertext]
+    plain = [chr((char ** key) % n) for char in ciphertext]
     # Return the array of bytes as a string
     return "".join(plain)
 
